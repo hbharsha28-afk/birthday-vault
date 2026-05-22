@@ -179,20 +179,14 @@ app.use('/gifts', (req, res, next) => {
 // API: Relay Push Notifications
 // POST /api/notify { message: "..." }
 // ==============================================
-app.post('/api/notify', express.json(), (req, res) => {
-    const ip = req.ip || req.connection.remoteAddress;
-    // Only allow notifications if the IP is authenticated (unlocked the vault)
-    if (!authenticatedIPs.has(ip)) {
-        return res.status(403).json({ error: 'Unauthorized' });
-    }
-
+app.post('/api/notify', (req, res) => {
     const { message } = req.body;
     if (message) {
         fetch('https://ntfy.sh/harsha_birthday_vault_alert_secret', {
             method: 'POST',
             body: message,
             headers: {
-                'Title': 'Gift Unwrapped!',
+                'Title': 'Vault Activity',
                 'Tags': 'gift',
                 'Priority': 'default'
             }
