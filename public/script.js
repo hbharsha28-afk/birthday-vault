@@ -773,3 +773,40 @@ function initScrollReveal() {
 // --- Init ---
 initParticles();
 passwordInput.focus();
+
+// --- Presence & Time Tracking Analytics ---
+let totalTimeSpentMs = 0;
+let lastActiveTime = null;
+
+document.addEventListener('visibilitychange', () => {
+    if (!lastActiveTime) return; // Vault has not been unlocked yet
+
+    if (document.visibilityState === 'hidden') {
+        // She minimized the app or switched tabs
+        const sessionTime = Date.now() - lastActiveTime;
+        totalTimeSpentMs += sessionTime;
+        lastActiveTime = null;
+        
+        const minutes = Math.floor(totalTimeSpentMs / 60000);
+        const seconds = Math.floor((totalTimeSpentMs % 60000) / 1000);
+        
+        let timeStr = `${seconds} seconds`;
+        if (minutes > 0) timeStr = `${minutes} minutes, ${seconds} seconds`;
+
+        fetch('/api/notify', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ message: `⏱️ She just closed the vault (or switched apps). Total time spent: ${timeStr}!` }),
+            keepalive: true
+        }).catch(() => {}); // silent fail if network drops
+    } else if (document.visibilityState === 'visible') {
+        // She came back!
+        lastActiveTime = Date.now();
+        fetch('/api/notify', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ message: `👀 She came back to look at the vault again!` }),
+            keepalive: true
+        }).catch(() => {});
+    }
+});
