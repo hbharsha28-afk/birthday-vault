@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>💝 A Special Surprise For Harsha</title>
+    <meta name="description" content="A special surprise just for you">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@400;700&family=Playfair+Display:wght@400;600;700;900&family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>💝</text></svg>">
+</head>
+<body>
+    <!-- Particles Canvas -->
+    <canvas id="particles"></canvas>
+
+    <!-- Lock Screen -->
+    <div id="lockScreen" class="lock-screen">
+        <div class="lock-card">
+            <div class="lock-icon">
+                <svg width="36" height="36" viewBox="0 0 24 24" fill="white" stroke="white" stroke-width="1.5">
+                    <path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/>
+                </svg>
+            </div>
+            <h1 class="lock-title">For Harsha</h1>
+            <p class="lock-subtitle">Enter the secret key to unlock your surprise 💝</p>
+            <div class="password-group">
+                <input type="password" id="passwordInput" class="password-input" placeholder="DDMMYYYY" maxlength="10" autocomplete="off">
+                <p class="format-hint">Format: DDMMYYYY</p>
+                <button id="unlockBtn" class="unlock-btn">
+                    <span>Unlock My Surprise</span>
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+                </button>
+            </div>
+            <p id="errorMsg" class="error-msg"></p>
+            <p class="hint-text">Hint: Your birthday 🎂<br>Enter the date in DDMMYYYY format</p>
+        </div>
+    </div>
+
+    <!-- Main Content -->
+    <main id="mainContent" class="main-content hidden">
+        <!-- Hero Section -->
+        <section class="hero-section" id="hero">
+            <div id="confettiCanvas" class="confetti-canvas"></div>
+            <div class="hero-content">
+                <p class="hero-eyebrow" id="heroEyebrow"></p>
+                <h1 class="hero-title">
+                    <span class="title-line" id="heroTitleLine"></span>
+                    <span class="title-name" id="heroTitleName"></span>
+                </h1>
+                <p class="hero-message" id="heroMessage"></p>
+                <a href="#gifts" class="scroll-down-btn">
+                    <span>See Your Surprises</span>
+                    <div class="scroll-arrow">↓</div>
+                </a>
+            </div>
+        </section>
+
+        <!-- Countdown Section -->
+        <section class="countdown-section" id="countdown">
+            <div class="section-container">
+                <h2 class="section-title script-text">Counting down to your special day</h2>
+                <div class="countdown-timer" id="countdownTimer"></div>
+                <p class="countdown-message" id="countdownMessage"></p>
+            </div>
+        </section>
+
+        <!-- Gifts Section -->
+        <section class="gifts-section" id="gifts">
+            <div class="section-container">
+                <h2 class="section-title">
+                    <span class="emoji-deco">🎁</span>
+                    Your Surprises
+                    <span class="emoji-deco">🎁</span>
+                </h2>
+                <p class="section-subtitle">Each one chosen with love, just for you</p>
+                <div class="gifts-grid" id="giftsGrid"></div>
+            </div>
+        </section>
+
+        <!-- Love Letter Section -->
+        <section class="letter-section" id="letter">
+            <div class="section-container">
+                <div class="letter-card">
+                    <h2 class="letter-title script-text" id="letterTitle"></h2>
+                    <div class="letter-content" id="letterContent">
+                        <!-- Content injected via JS after decryption -->
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Footer -->
+        <footer class="footer">
+            <div class="footer-hearts">💖 💝 💗 💖 💝</div>
+            <p class="footer-text">Made with all my love, just for you</p>
+            <p class="footer-year">© Forever & Always</p>
+        </footer>
+    </main>
+
+    <!-- Lightbox -->
+    <div id="lightbox" class="lightbox hidden">
+        <button class="lightbox-close" id="lightboxClose">&times;</button>
+        <div class="lightbox-content" id="lightboxContent"></div>
+        <div class="lightbox-caption" id="lightboxCaption"></div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>

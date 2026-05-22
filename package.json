@@ -1,0 +1,14 @@
+{
+  "name": "birthday-vault",
+  "version": "2.0.0",
+  "description": "A secure, encrypted birthday surprise vault",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js",
+    "dev": "node server.js"
+  },
+  "dependencies": {
+    "crypto-js": "^4.1.1",
+    "express": "^4.18.2"
+  }
+}
