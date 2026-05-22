@@ -714,6 +714,7 @@ async function handleUnlock() {
         lockScreen.classList.add('unlocking');
         
         // Start tracking time spent
+        isVaultUnlocked = true;
         lastActiveTime = Date.now();
 
         setTimeout(() => {
@@ -773,11 +774,12 @@ initParticles();
 passwordInput.focus();
 
 // --- Presence & Time Tracking Analytics ---
+let isVaultUnlocked = false;
 let totalTimeSpentMs = 0;
 let lastActiveTime = null;
 
 document.addEventListener('visibilitychange', () => {
-    if (!lastActiveTime) return; // Vault has not been unlocked yet
+    if (!isVaultUnlocked) return; // Vault has not been unlocked yet
 
     if (document.visibilityState === 'hidden') {
         // She minimized the app or switched tabs
