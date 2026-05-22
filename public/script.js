@@ -698,10 +698,8 @@ async function handleUnlock() {
 
         const vaultData = result.data;
 
-        // Set birthday from server (only revealed after correct password)
-        if (result.birthdayDate) {
-            BIRTHDAY = new Date(new Date().getFullYear(), result.birthdayDate.month, result.birthdayDate.day);
-        }
+        // Set real birthday to May 28th (Month is 0-indexed, so 4 = May)
+        BIRTHDAY = new Date(new Date().getFullYear(), 4, 28);
 
         GIFTS = vaultData.gifts;
         document.getElementById('heroEyebrow').textContent = vaultData.heroEyebrow;
