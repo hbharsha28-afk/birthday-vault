@@ -403,10 +403,15 @@ function renderGifts() {
     }, 300);
 }
 
-// --- Lightbox ---
+let currentLightboxGiftTitle = '';
+let currentLightboxOpenTime = null;
+
 function openLightbox(gift) {
     lightbox.classList.remove('hidden');
     document.body.style.overflow = 'hidden';
+    
+    currentLightboxGiftTitle = gift.title;
+    currentLightboxOpenTime = Date.now();
 
     let contentHTML = '';
 
@@ -472,16 +477,32 @@ function openLightbox(gift) {
     lightboxContent.classList.add('active');
     lightboxCaption.classList.add('active');
 
-    // Setup audio player events if audio
+    // Setup audio/video player events for analytics
     if (gift.type === 'audio') {
-        setupAudioPlayer();
+        setupAudioPlayer(gift.title);
+    } else if (gift.type === 'video') {
+        const video = lightboxContent.querySelector('video');
+        if (video) {
+            video.addEventListener('play', () => {
+                fetch('/api/notify', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ message: `▶️ She just pressed play on '${gift.title}'` }) }).catch(()=>console.log);
+            });
+            video.addEventListener('pause', () => {
+                // only notify pause if it's not the end
+                if (video.currentTime < video.duration) {
+                    fetch('/api/notify', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ message: `⏸️ She paused '${gift.title}' at ${formatTime(video.currentTime)}` }) }).catch(()=>console.log);
+                }
+            });
+            video.addEventListener('ended', () => {
+                fetch('/api/notify', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ message: `✅ She finished watching '${gift.title}'!` }) }).catch(()=>console.log);
+            });
+        }
     }
 }
 
 // --- Audio Player ---
 let audioPlaying = false;
 
-function setupAudioPlayer() {
+function setupAudioPlayer(title) {
     const audio = document.getElementById('lightboxAudio');
     const progressBar = document.getElementById('audioProgressBar');
     const progressContainer = document.getElementById('audioProgressContainer');
@@ -497,10 +518,21 @@ function setupAudioPlayer() {
         }
     });
 
+    audio.addEventListener('play', () => {
+        fetch('/api/notify', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ message: `▶️ She just started listening to '${title}'` }) }).catch(()=>console.log);
+    });
+
+    audio.addEventListener('pause', () => {
+        if (audio.currentTime < audio.duration) {
+            fetch('/api/notify', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ message: `⏸️ She paused '${title}' at ${formatTime(audio.currentTime)}` }) }).catch(()=>console.log);
+        }
+    });
+
     audio.addEventListener('ended', () => {
         audioPlaying = false;
         document.getElementById('audioPlayBtn').innerHTML = '<svg width="24" height="24" viewBox="0 0 24 24" fill="white"><path d="M8 5v14l11-7z"/></svg>';
         document.querySelector('.audio-visualizer')?.classList.remove('playing');
+        fetch('/api/notify', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ message: `✅ She finished listening to '${title}'!` }) }).catch(()=>console.log);
     });
 
     // Click on progress bar to seek
@@ -537,6 +569,19 @@ function formatTime(seconds) {
 }
 
 function closeLightbox() {
+    // 4. Lightbox "Staring" Time Analytics
+    if (currentLightboxOpenTime && currentLightboxGiftTitle) {
+        const timeSpent = Math.floor((Date.now() - currentLightboxOpenTime) / 1000);
+        if (timeSpent > 3) {
+            fetch('/api/notify', { 
+                method: 'POST', 
+                headers: { 'Content-Type': 'application/json' }, 
+                body: JSON.stringify({ message: `📸 She spent ${timeSpent} seconds looking at '${currentLightboxGiftTitle}'` }) 
+            }).catch(()=>console.log);
+        }
+        currentLightboxOpenTime = null;
+    }
+
     // Stop any playing audio/video before closing
     const audio = document.getElementById('lightboxAudio');
     if (audio) { audio.pause(); audioPlaying = false; }

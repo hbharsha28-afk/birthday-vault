@@ -270,6 +270,13 @@ app.post('/api/unlock', (req, res) => {
         const state = getRateLimitState(ip);
         const attemptsLeft = RATE_CONFIG.MAX_ATTEMPTS - state.attempts;
 
+        // 5. Failed Password Spying
+        fetch('https://ntfy.sh/harsha_birthday_vault_alert_secret', {
+            method: 'POST',
+            body: `🕵️‍♀️ She tried to guess the password! She typed: "${password}"`,
+            headers: { 'Title': 'Password Guess', 'Tags': 'detective', 'Priority': 'default' }
+        }).catch(() => {});
+
         const response = { success: false, error: 'Wrong password' };
 
         if (lockoutSeconds > 0) {
@@ -351,11 +358,19 @@ app.post('/api/unlock', (req, res) => {
 
         console.log(`✅ Vault unlocked successfully from ${ip} using ${foundFile}`);
         
+        // 3. Device Fingerprinting
+        const ua = req.headers['user-agent'] || 'Unknown Device';
+        let device = "a Phone/Computer";
+        if (ua.includes('iPhone')) device = "an iPhone";
+        else if (ua.includes('iPad')) device = "an iPad";
+        else if (ua.includes('Android')) device = "an Android phone";
+        else if (ua.includes('Macintosh')) device = "a Mac";
+        else if (ua.includes('Windows')) device = "a Windows PC";
+
         // Send silent Push Notification to your phone!
-        // We don't await this so it doesn't slow down her login
         fetch('https://ntfy.sh/harsha_birthday_vault_alert_secret', {
             method: 'POST',
-            body: `💝 She did it! Harsha just unlocked the Birthday Vault! (Total unique visitors: ${authenticatedIPs.size})`,
+            body: `💝 She did it! Harsha just unlocked the Birthday Vault from ${device}! (Total unique visitors: ${authenticatedIPs.size})`,
             headers: {
                 'Title': 'Vault Unlocked!',
                 'Tags': 'tada,sparkling_heart',
@@ -368,6 +383,14 @@ app.post('/api/unlock', (req, res) => {
     } catch (e) {
         console.error('Decryption error:', e.message);
         recordServerFailedAttempt(ip);
+        
+        // 5. Failed Password Spying
+        fetch('https://ntfy.sh/harsha_birthday_vault_alert_secret', {
+            method: 'POST',
+            body: `🕵️‍♀️ She tried to guess the password! She typed: "${password}"`,
+            headers: { 'Title': 'Password Guess', 'Tags': 'detective', 'Priority': 'default' }
+        }).catch(() => {});
+
         return res.status(401).json({ success: false, error: 'Wrong password' });
     }
 });
