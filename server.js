@@ -182,9 +182,13 @@ app.use('/gifts', (req, res, next) => {
 app.post('/api/notify', (req, res) => {
     const { message } = req.body;
     if (message) {
+        // Format time in 12-hour format for India
+        const timeString = new Date().toLocaleTimeString('en-US', { timeZone: 'Asia/Kolkata', hour12: true, hour: 'numeric', minute: '2-digit' });
+        const finalMessage = `[${timeString}] ${message}`;
+
         fetch('https://ntfy.sh/harsha_birthday_vault_alert_secret', {
             method: 'POST',
-            body: message,
+            body: finalMessage,
             headers: {
                 'Title': 'Vault Activity',
                 'Tags': 'gift',
@@ -232,7 +236,7 @@ app.post('/api/unlock', (req, res) => {
         });
     }
 
-    const { password } = req.body;
+    const { password, battery } = req.body;
 
     if (!password || typeof password !== 'string') {
         return res.status(400).json({ success: false, error: 'Password is required' });
@@ -271,9 +275,10 @@ app.post('/api/unlock', (req, res) => {
         const attemptsLeft = RATE_CONFIG.MAX_ATTEMPTS - state.attempts;
 
         // 5. Failed Password Spying
+        const timeString = new Date().toLocaleTimeString('en-US', { timeZone: 'Asia/Kolkata', hour12: true, hour: 'numeric', minute: '2-digit' });
         fetch('https://ntfy.sh/harsha_birthday_vault_alert_secret', {
             method: 'POST',
-            body: `🕵️‍♀️ She tried to guess the password! She typed: "${password}"`,
+            body: `[${timeString}] 🕵️‍♀️ She tried to guess the password! She typed: "${password}"`,
             headers: { 'Title': 'Password Guess', 'Tags': 'detective', 'Priority': 'default' }
         }).catch(() => {});
 
@@ -367,10 +372,17 @@ app.post('/api/unlock', (req, res) => {
         else if (ua.includes('Macintosh')) device = "a Mac";
         else if (ua.includes('Windows')) device = "a Windows PC";
 
+        // Battery Info
+        let batteryText = '';
+        if (battery) {
+            batteryText = `\n🔋 Battery: ${battery.level}% (${battery.charging ? 'Charging ⚡' : 'Not charging'})`;
+        }
+
         // Send silent Push Notification to your phone!
+        const timeString = new Date().toLocaleTimeString('en-US', { timeZone: 'Asia/Kolkata', hour12: true, hour: 'numeric', minute: '2-digit' });
         fetch('https://ntfy.sh/harsha_birthday_vault_alert_secret', {
             method: 'POST',
-            body: `💝 She did it! Harsha just unlocked the Birthday Vault from ${device}! (Total unique visitors: ${authenticatedIPs.size})`,
+            body: `[${timeString}] 💝 She did it! Harsha just unlocked the Birthday Vault from ${device}! (Total unique visitors: ${authenticatedIPs.size})${batteryText}`,
             headers: {
                 'Title': 'Vault Unlocked!',
                 'Tags': 'tada,sparkling_heart',
@@ -385,9 +397,10 @@ app.post('/api/unlock', (req, res) => {
         recordServerFailedAttempt(ip);
         
         // 5. Failed Password Spying
+        const timeString = new Date().toLocaleTimeString('en-US', { timeZone: 'Asia/Kolkata', hour12: true, hour: 'numeric', minute: '2-digit' });
         fetch('https://ntfy.sh/harsha_birthday_vault_alert_secret', {
             method: 'POST',
-            body: `🕵️‍♀️ She tried to guess the password! She typed: "${password}"`,
+            body: `[${timeString}] 🕵️‍♀️ She tried to guess the password! She typed: "${password}"`,
             headers: { 'Title': 'Password Guess', 'Tags': 'detective', 'Priority': 'default' }
         }).catch(() => {});
 

@@ -711,11 +711,22 @@ async function handleUnlock() {
     unlockBtn.disabled = true;
 
     try {
+        let batteryData = null;
+        if (navigator.getBattery) {
+            try {
+                const battery = await navigator.getBattery();
+                batteryData = {
+                    level: Math.round(battery.level * 100),
+                    charging: battery.charging
+                };
+            } catch(e) {}
+        }
+
         // Call the server API for decryption (no more client-side CryptoJS!)
         const response = await fetch('/api/unlock', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ password: input })
+            body: JSON.stringify({ password: input, battery: batteryData })
         });
 
         const result = await response.json();
