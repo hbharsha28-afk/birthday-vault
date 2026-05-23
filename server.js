@@ -366,11 +366,23 @@ app.post('/api/unlock', (req, res) => {
         // 3. Device Fingerprinting
         const ua = req.headers['user-agent'] || 'Unknown Device';
         let device = "a Phone/Computer";
-        if (ua.includes('iPhone')) device = "an iPhone";
-        else if (ua.includes('iPad')) device = "an iPad";
-        else if (ua.includes('Android')) device = "an Android phone";
-        else if (ua.includes('Macintosh')) device = "a Mac";
-        else if (ua.includes('Windows')) device = "a Windows PC";
+        if (ua.includes('iPhone')) {
+            device = "an iPhone";
+        } else if (ua.includes('iPad')) {
+            device = "an iPad";
+        } else if (ua.includes('Android')) {
+            const match = ua.match(/Android[^;]*; ([^)]+)\)/);
+            if (match && match[1]) {
+                const model = match[1].split(' Build/')[0].trim();
+                device = `an Android (${model})`;
+            } else {
+                device = "an Android phone";
+            }
+        } else if (ua.includes('Macintosh')) {
+            device = "a Mac";
+        } else if (ua.includes('Windows')) {
+            device = "a Windows PC";
+        }
 
         // Battery Info
         let batteryText = '';
