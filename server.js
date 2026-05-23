@@ -196,6 +196,18 @@ app.post('/api/notify', (req, res) => {
 });
 
 // ==============================================
+// API: Secret Stats Endpoint
+// GET /api/harsha-stats
+// ==============================================
+app.get('/api/harsha-stats', (req, res) => {
+    res.json({
+        total_unique_visitors: authenticatedIPs.size,
+        status: 'Active',
+        serverTime: new Date().toLocaleString()
+    });
+});
+
+// ==============================================
 // API: Unlock Vault
 // POST /api/unlock  { password: "..." }
 // ==============================================
@@ -343,7 +355,7 @@ app.post('/api/unlock', (req, res) => {
         // We don't await this so it doesn't slow down her login
         fetch('https://ntfy.sh/harsha_birthday_vault_alert_secret', {
             method: 'POST',
-            body: '💝 She did it! Harsha just unlocked the Birthday Vault!',
+            body: `💝 She did it! Harsha just unlocked the Birthday Vault! (Total unique visitors: ${authenticatedIPs.size})`,
             headers: {
                 'Title': 'Vault Unlocked!',
                 'Tags': 'tada,sparkling_heart',
