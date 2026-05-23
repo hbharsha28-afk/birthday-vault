@@ -335,7 +335,7 @@ app.post('/api/unlock', (req, res) => {
                 type: 'image',
                 title: 'A Drawing of You',
                 message: 'My attempt to capture even a fraction of your beauty.',
-                src: 'https://drive.google.com/uc?id=1pg_5uWME9R6OyNjwnlLhVv8U7C5Z3Bwh'
+                src: '/gifts/harsha_drawing.jpg'
             },
             {
                 type: 'pdf',
