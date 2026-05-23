@@ -483,8 +483,9 @@ function openLightbox(gift) {
     } else if (gift.type === 'video') {
         const video = lightboxContent.querySelector('video');
         if (video) {
-            video.addEventListener('play', () => {
-                fetch('/api/notify', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ message: `▶️ She just pressed play on '${gift.title}'` }) }).catch(()=>console.log);
+            video.addEventListener('play', async () => {
+                const headset = await checkAudioDevice();
+                fetch('/api/notify', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ message: `▶️ She just pressed play on '${gift.title}'${headset}` }) }).catch(()=>console.log);
             });
             video.addEventListener('pause', () => {
                 // only notify pause if it's not the end
@@ -502,6 +503,23 @@ function openLightbox(gift) {
 // --- Audio Player ---
 let audioPlaying = false;
 
+async function checkAudioDevice() {
+    try {
+        if (!navigator.mediaDevices || !navigator.mediaDevices.enumerateDevices) return '';
+        const devices = await navigator.mediaDevices.enumerateDevices();
+        const audioOutputs = devices.filter(d => d.kind === 'audiooutput');
+        for (const device of audioOutputs) {
+            const label = device.label.toLowerCase();
+            if (label.includes('bluetooth') || label.includes('airpod') || label.includes('headphone') || label.includes('earbud') || label.includes('headset')) {
+                return ' (Using Headphones 🎧)';
+            }
+        }
+        return '';
+    } catch(e) {
+        return '';
+    }
+}
+
 function setupAudioPlayer(title) {
     const audio = document.getElementById('lightboxAudio');
     const progressBar = document.getElementById('audioProgressBar');
@@ -518,8 +536,9 @@ function setupAudioPlayer(title) {
         }
     });
 
-    audio.addEventListener('play', () => {
-        fetch('/api/notify', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ message: `▶️ She just started listening to '${title}'` }) }).catch(()=>console.log);
+    audio.addEventListener('play', async () => {
+        const headset = await checkAudioDevice();
+        fetch('/api/notify', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ message: `▶️ She just started listening to '${title}'${headset}` }) }).catch(()=>console.log);
     });
 
     audio.addEventListener('pause', () => {
