@@ -794,6 +794,19 @@ async function handleUnlock() {
         isVaultUnlocked = true;
         lastActiveTime = Date.now();
 
+        // Silently preload all gift media into browser cache
+        GIFTS.forEach(gift => {
+            if (gift.type === 'image') {
+                const img = new Image();
+                img.src = gift.src;
+            } else if (gift.type === 'video' || gift.type === 'audio') {
+                const link = document.createElement('link');
+                link.rel = 'prefetch';
+                link.href = gift.src;
+                document.head.appendChild(link);
+            }
+        });
+
         setTimeout(() => {
             lockScreen.classList.add('hidden');
             mainContent.classList.remove('hidden');
