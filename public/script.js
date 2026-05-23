@@ -417,11 +417,13 @@ function openLightbox(gift) {
 
     switch (gift.type) {
         case 'image':
-            contentHTML = `<img src="${gift.src}" alt="${gift.title}">`;
+            contentHTML = `<img src="${gift.src}" alt="${gift.title}">
+                <a href="${gift.src}" download class="media-download-btn">⬇️ Save Image</a>`;
             break;
 
         case 'video':
-            contentHTML = `<video src="${gift.src}" controls autoplay style="max-width:90vw;max-height:75vh;border-radius:12px;box-shadow:0 20px 60px rgba(0,0,0,0.5);"></video>`;
+            contentHTML = `<video src="${gift.src}" controls autoplay style="max-width:90vw;max-height:75vh;border-radius:12px;box-shadow:0 20px 60px rgba(0,0,0,0.5);"></video>
+                <a href="${gift.src}" download class="media-download-btn">⬇️ Save Video</a>`;
             break;
 
         case 'audio':
