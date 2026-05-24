@@ -358,7 +358,7 @@ function renderGifts() {
                             <span></span><span></span><span></span><span></span><span></span>
                             <span></span><span></span><span></span><span></span><span></span>
                         </div>
-                        <span class="file-name">${gift.src.split('/').pop()}</span>
+                        <span class="file-name">${gift.title}</span>
                         <span class="play-badge">▶ Listen</span>
                     </div>`;
                 typeLabel = '🎵 AUDIO';
