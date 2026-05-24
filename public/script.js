@@ -419,12 +419,12 @@ function openLightbox(gift) {
     switch (gift.type) {
         case 'image':
             contentHTML = `<img src="${gift.src}" alt="${gift.title}">
-                <a href="${gift.src}" download class="media-download-btn">⬇️ Save Image</a>`;
+                <a href="${gift.src}" download="${gift.title}.${gift.src.split('.').pop()}" class="media-download-btn">⬇️ Save Image</a>`;
             break;
 
         case 'video':
             contentHTML = `<video src="${gift.src}" controls autoplay style="max-width:90vw;max-height:75vh;border-radius:12px;box-shadow:0 20px 60px rgba(0,0,0,0.5);"></video>
-                <a href="${gift.src}" download class="media-download-btn">⬇️ Save Video</a>`;
+                <a href="${gift.src}" download="${gift.title}.${gift.src.split('.').pop()}" class="media-download-btn">⬇️ Save Video</a>`;
             break;
 
         case 'audio':
@@ -448,7 +448,7 @@ function openLightbox(gift) {
                         <span></span><span></span><span></span><span></span><span></span>
                         <span></span><span></span><span></span><span></span><span></span>
                     </div>
-                    <a href="${gift.src}" download class="audio-download-btn">⬇️ Download Audio</a>
+                    <a href="${gift.src}" download="${gift.title}.${gift.src.split('.').pop()}" class="audio-download-btn">⬇️ Download Audio</a>
                 </div>`;
             break;
 
@@ -456,7 +456,7 @@ function openLightbox(gift) {
             contentHTML = `
                 <div class="pdf-viewer-container">
                     <iframe src="${gift.src}" class="pdf-iframe" title="${gift.title}"></iframe>
-                    <a href="${gift.src}" download class="pdf-download-btn">⬇️ Download PDF</a>
+                    <a href="${gift.src}" download="${gift.title}.${gift.src.split('.').pop()}" class="pdf-download-btn">⬇️ Download PDF</a>
                 </div>`;
             break;
 
@@ -465,7 +465,7 @@ function openLightbox(gift) {
                 <div style="text-align:center; padding: 3rem;">
                     <p style="font-size: 5rem; margin-bottom: 1rem;">${getFileIcon(gift.src)}</p>
                     <p style="color: var(--text-secondary); margin-bottom: 1.5rem; font-size: 1.1rem;">${gift.src.split('/').pop()}</p>
-                    <a href="${gift.src}" download class="generic-download-btn">⬇️ Download File</a>
+                    <a href="${gift.src}" download="${gift.title}.${gift.src.split('.').pop()}" class="generic-download-btn">⬇️ Download File</a>
                 </div>`;
             break;
     }
