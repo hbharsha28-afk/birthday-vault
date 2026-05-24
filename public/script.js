@@ -335,7 +335,8 @@ function renderGifts() {
 
         switch (gift.type) {
             case 'image':
-                mediaHTML = `<img class="gift-card-media" src="${gift.src}" alt="${gift.title}" loading="lazy">`;
+                mediaHTML = `<img class="gift-card-media" src="${gift.src}" alt="${gift.title}" loading="lazy">
+                    <p style="text-align:center; font-size:0.8rem; color:var(--text-muted); margin-top:0.5rem; opacity:0.8;">🔍 Tap to view full image</p>`;
                 typeLabel = '📸 IMAGE';
                 break;
 
