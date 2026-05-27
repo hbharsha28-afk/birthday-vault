@@ -21,12 +21,14 @@ const lightboxClose = document.getElementById('lightboxClose');
 const countdownTimer = document.getElementById('countdownTimer');
 const countdownMessage = document.getElementById('countdownMessage');
 
-// --- Particle System ---
+// --- Particle System (Lock Screen Only — Subtle Glowing Orbs) ---
+let particleAnimationId = null;
+
 function initParticles() {
     const canvas = document.getElementById('particles');
     const ctx = canvas.getContext('2d');
     let particles = [];
-    const PARTICLE_COUNT = 40; // Floating hearts
+    const PARTICLE_COUNT = 50;
 
     function resize() {
         canvas.width = window.innerWidth;
@@ -37,26 +39,25 @@ function initParticles() {
         constructor() { this.reset(); }
         reset() {
             this.x = Math.random() * canvas.width;
-            this.y = Math.random() * canvas.height + canvas.height; // Start below screen sometimes
-            this.size = Math.random() * 8 + 4; // Heart size
-            this.speedX = (Math.random() - 0.5) * 0.8;
-            this.speedY = -(Math.random() * 1.5 + 0.5); // Always float upwards
-            this.opacity = Math.random() * 0.6 + 0.1;
-            // Shades of intensely passionate red, pink, and rose gold
-            const colors = ['#ff0844', '#ff3366', '#ff2a6d', '#ff85a2', '#ffdf00'];
+            this.y = Math.random() * canvas.height + canvas.height;
+            this.size = Math.random() * 3 + 1;
+            this.speedX = (Math.random() - 0.5) * 0.5;
+            this.speedY = -(Math.random() * 0.8 + 0.2);
+            this.opacity = Math.random() * 0.5 + 0.05;
+            const colors = ['#00c8a0', '#00e6b4', '#0aa89e', '#1affd5', '#b0fff0'];
             this.color = colors[Math.floor(Math.random() * colors.length)];
             this.wobble = Math.random() * Math.PI * 2;
-            this.wobbleSpeed = Math.random() * 0.02 + 0.01;
+            this.wobbleSpeed = Math.random() * 0.015 + 0.005;
         }
         update() {
-            this.x += this.speedX + Math.sin(this.wobble) * 0.5;
+            this.x += this.speedX + Math.sin(this.wobble) * 0.3;
             this.y += this.speedY;
             this.wobble += this.wobbleSpeed;
             
             if (this.y < -50 || this.x < -50 || this.x > canvas.width + 50) {
                 this.x = Math.random() * canvas.width;
                 this.y = canvas.height + 50;
-                this.opacity = Math.random() * 0.6 + 0.1;
+                this.opacity = Math.random() * 0.5 + 0.05;
             }
         }
         draw() {
@@ -64,20 +65,9 @@ function initParticles() {
             ctx.globalAlpha = this.opacity;
             ctx.fillStyle = this.color;
             ctx.shadowColor = this.color;
-            ctx.shadowBlur = 10;
-            
-            // Draw a heart shape
-            ctx.translate(this.x, this.y);
-            // Slight rotation for floating effect
-            ctx.rotate(Math.sin(this.wobble) * 0.2); 
-            ctx.scale(this.size / 20, this.size / 20); // Scale down based on size
-            
+            ctx.shadowBlur = 15;
             ctx.beginPath();
-            ctx.moveTo(0, 5);
-            ctx.bezierCurveTo(0, -5, -10, -10, -20, -5);
-            ctx.bezierCurveTo(-30, 5, -10, 20, 0, 30);
-            ctx.bezierCurveTo(10, 20, 30, 5, 20, -5);
-            ctx.bezierCurveTo(10, -10, 0, -5, 0, 5);
+            ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
             ctx.fill();
             ctx.restore();
         }
@@ -87,7 +77,6 @@ function initParticles() {
     window.addEventListener('resize', resize);
     for (let i = 0; i < PARTICLE_COUNT; i++) {
         const p = new Particle();
-        // Randomize initial Y to fill the screen initially
         p.y = Math.random() * canvas.height;
         particles.push(p);
     }
@@ -95,9 +84,22 @@ function initParticles() {
     function animate() {
         ctx.clearRect(0, 0, canvas.width, canvas.height);
         particles.forEach(p => { p.update(); p.draw(); });
-        requestAnimationFrame(animate);
+        particleAnimationId = requestAnimationFrame(animate);
     }
     animate();
+}
+
+function stopParticles() {
+    if (particleAnimationId) {
+        cancelAnimationFrame(particleAnimationId);
+        particleAnimationId = null;
+    }
+    const canvas = document.getElementById('particles');
+    if (canvas) {
+        const ctx = canvas.getContext('2d');
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+        canvas.style.display = 'none';
+    }
 }
 
 // --- Confetti ---
@@ -790,6 +792,7 @@ async function handleUnlock() {
         clearRateLimit();
         errorMsg.textContent = '';
         lockScreen.classList.add('unlocking');
+        stopParticles();
         
         // Start tracking time spent
         isVaultUnlocked = true;

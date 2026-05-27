@@ -93,7 +93,7 @@ body {
 }
 
 /* ========================================
-   LOCK SCREEN (Centered & Emotional)
+   LOCK SCREEN (Dark Vault Theme)
    ======================================== */
 .lock-screen {
     position: fixed;
@@ -102,10 +102,29 @@ body {
     display: flex;
     align-items: center;
     justify-content: center;
-    background: var(--bg-color);
-    background-image: var(--bg-gradient);
+    background: #08090d;
+    background-image: radial-gradient(circle at 50% 0%, #0f1923 0%, #0a0e16 50%, #08090d 100%);
     transition: opacity 1.5s ease, transform 1.5s ease;
     padding: 1rem;
+    overflow: hidden;
+}
+
+/* Subtle animated grid overlay for the lock screen */
+.lock-screen::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background-image:
+        linear-gradient(rgba(0, 255, 200, 0.015) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(0, 255, 200, 0.015) 1px, transparent 1px);
+    background-size: 60px 60px;
+    animation: gridDrift 20s linear infinite;
+    pointer-events: none;
+}
+
+@keyframes gridDrift {
+    0% { transform: translate(0, 0); }
+    100% { transform: translate(60px, 60px); }
 }
 
 .lock-screen.unlocking {
@@ -115,16 +134,16 @@ body {
 }
 
 .lock-card {
-    background: var(--glass-bg);
-    backdrop-filter: blur(16px);
-    -webkit-backdrop-filter: blur(16px);
-    border: 1px solid var(--glass-border);
-    border-radius: 30px;
+    background: rgba(15, 20, 30, 0.7);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    border: 1px solid rgba(0, 200, 160, 0.15);
+    border-radius: 24px;
     padding: 3.5rem 2.5rem;
     max-width: 420px;
     width: 100%;
     text-align: center;
-    box-shadow: var(--glass-shadow);
+    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.6), 0 0 40px rgba(0, 200, 160, 0.05);
     animation: float 6s ease-in-out infinite;
     position: relative;
     z-index: 1;
@@ -132,34 +151,32 @@ body {
 
 @keyframes float {
     0%, 100% { transform: translateY(0px); }
-    50% { transform: translateY(-15px); }
+    50% { transform: translateY(-12px); }
 }
 
 .lock-icon {
     width: 80px;
     height: 80px;
     margin: 0 auto 1.5rem;
-    background: linear-gradient(135deg, var(--accent-red), var(--accent-pink));
+    background: linear-gradient(135deg, #0d3b3b, #164040);
+    border: 1px solid rgba(0, 200, 160, 0.3);
     border-radius: 50%;
     display: flex;
     align-items: center;
     justify-content: center;
-    box-shadow: 0 0 30px rgba(255, 77, 109, 0.5);
-    animation: heartbeat 1.5s ease-in-out infinite;
+    box-shadow: 0 0 25px rgba(0, 200, 160, 0.2);
+    animation: vaultPulse 3s ease-in-out infinite;
 }
 
-@keyframes heartbeat {
-    0% { transform: scale(1); box-shadow: 0 0 20px rgba(255, 77, 109, 0.4); }
-    15% { transform: scale(1.15); box-shadow: 0 0 40px rgba(255, 77, 109, 0.7); }
-    30% { transform: scale(1); box-shadow: 0 0 20px rgba(255, 77, 109, 0.4); }
-    45% { transform: scale(1.15); box-shadow: 0 0 40px rgba(255, 77, 109, 0.7); }
-    100% { transform: scale(1); box-shadow: 0 0 20px rgba(255, 77, 109, 0.4); }
+@keyframes vaultPulse {
+    0%, 100% { box-shadow: 0 0 20px rgba(0, 200, 160, 0.15); border-color: rgba(0, 200, 160, 0.25); }
+    50% { box-shadow: 0 0 35px rgba(0, 200, 160, 0.35); border-color: rgba(0, 200, 160, 0.5); }
 }
 
 .lock-icon svg {
-    width: 40px;
-    height: 40px;
-    fill: white;
+    width: 36px;
+    height: 36px;
+    stroke: rgba(0, 220, 180, 0.9);
 }
 
 .lock-title {
@@ -167,13 +184,14 @@ body {
     font-size: 2.2rem;
     font-weight: 700;
     margin-bottom: 0.5rem;
-    background: linear-gradient(to right, #fff, var(--accent-light-pink));
+    background: linear-gradient(to right, #e0e0e0, #7fdbca);
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
+    letter-spacing: 2px;
 }
 
 .lock-subtitle {
-    color: var(--text-muted);
+    color: rgba(180, 200, 210, 0.7);
     font-size: 1rem;
     margin-bottom: 2.5rem;
     font-weight: 300;
@@ -188,8 +206,8 @@ body {
 .password-input {
     width: 100%;
     padding: 1.2rem;
-    background: rgba(255, 255, 255, 0.08);
-    border: 2px solid transparent;
+    background: rgba(255, 255, 255, 0.04);
+    border: 2px solid rgba(0, 200, 160, 0.12);
     border-radius: 15px;
     color: white;
     font-family: var(--font-body);
@@ -198,17 +216,17 @@ body {
     letter-spacing: 4px;
     outline: none;
     transition: var(--transition-smooth);
-    box-shadow: inset 0 2px 10px rgba(0,0,0,0.2);
+    box-shadow: inset 0 2px 10px rgba(0,0,0,0.3);
 }
 
 .password-input:focus {
-    border-color: var(--accent-pink);
-    background: rgba(255, 255, 255, 0.12);
-    box-shadow: 0 0 20px rgba(255, 117, 143, 0.3), inset 0 2px 10px rgba(0,0,0,0.2);
+    border-color: rgba(0, 200, 160, 0.5);
+    background: rgba(255, 255, 255, 0.07);
+    box-shadow: 0 0 20px rgba(0, 200, 160, 0.15), inset 0 2px 10px rgba(0,0,0,0.3);
 }
 
 .password-input::placeholder {
-    color: rgba(255,255,255,0.4);
+    color: rgba(255,255,255,0.3);
     letter-spacing: 2px;
     font-size: 1rem;
 }
@@ -216,10 +234,10 @@ body {
 .unlock-btn {
     width: 100%;
     padding: 1.2rem;
-    background: linear-gradient(135deg, var(--accent-red), var(--accent-pink));
-    border: none;
+    background: linear-gradient(135deg, #0a4040, #0d5050, #0a4040);
+    border: 1px solid rgba(0, 200, 160, 0.3);
     border-radius: 15px;
-    color: white;
+    color: rgba(0, 230, 180, 0.9);
     font-family: var(--font-body);
     font-size: 1.1rem;
     font-weight: 600;
@@ -229,9 +247,10 @@ body {
     align-items: center;
     justify-content: center;
     gap: 0.5rem;
-    box-shadow: 0 10px 20px rgba(255, 77, 109, 0.3);
+    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.3);
     position: relative;
     overflow: hidden;
+    letter-spacing: 1px;
 }
 
 .unlock-btn::after {
@@ -241,7 +260,7 @@ body {
     left: -50%;
     width: 200%;
     height: 200%;
-    background: linear-gradient(to right, rgba(255,255,255,0) 0%, rgba(255,255,255,0.3) 50%, rgba(255,255,255,0) 100%);
+    background: linear-gradient(to right, rgba(255,255,255,0) 0%, rgba(0,220,180,0.15) 50%, rgba(255,255,255,0) 100%);
     transform: rotate(45deg);
     transition: all 0.5s ease;
     opacity: 0;
@@ -259,7 +278,9 @@ body {
 
 .unlock-btn:hover {
     transform: translateY(-3px);
-    box-shadow: 0 15px 30px rgba(255, 77, 109, 0.5);
+    box-shadow: 0 15px 30px rgba(0, 200, 160, 0.2);
+    border-color: rgba(0, 200, 160, 0.6);
+    background: linear-gradient(135deg, #0d5050, #106060, #0d5050);
 }
 
 .unlock-btn:active {
@@ -267,7 +288,7 @@ body {
 }
 
 .format-hint {
-    color: var(--accent-gold);
+    color: rgba(0, 200, 160, 0.6);
     font-size: 0.85rem;
     letter-spacing: 2px;
     font-weight: 500;
@@ -275,7 +296,7 @@ body {
 }
 
 .error-msg {
-    color: #ff3333;
+    color: #ff5252;
     font-size: 0.95rem;
     min-height: 1.5rem;
     margin-top: 1rem;
@@ -283,7 +304,7 @@ body {
 }
 
 .hint-text {
-    color: var(--text-muted);
+    color: rgba(180, 200, 210, 0.5);
     font-size: 0.85rem;
     margin-top: 1.5rem;
     font-style: italic;
