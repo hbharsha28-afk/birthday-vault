@@ -339,7 +339,7 @@ app.post('/api/unlock', (req, res) => {
                 type: 'pdf',
                 title: 'My Handwritten Diary',
                 message: 'Pages filled with my thoughts, feelings, and love for you.',
-                src: '/gifts/handwritten_diary.pdf'
+                src: '/gifts/harsha_diary.pdf'
             },
             {
                 type: 'audio',
