@@ -35,8 +35,8 @@ app.use((req, res, next) => {
 // SECURITY: Hardened HTTP Headers
 // ==============================================
 app.use((req, res, next) => {
-    // Prevent clickjacking
-    res.setHeader('X-Frame-Options', 'DENY');
+    // Prevent clickjacking but allow same-origin iframes for the PDF viewer
+    res.setHeader('X-Frame-Options', 'SAMEORIGIN');
     // Prevent MIME type sniffing
     res.setHeader('X-Content-Type-Options', 'nosniff');
     // XSS protection
