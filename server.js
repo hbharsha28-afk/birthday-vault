@@ -157,20 +157,17 @@ app.use(express.static(path.join(__dirname, 'public'), {
 }));
 
 // ==============================================
+// ==============================================
 // AUTHENTICATION TRACKING
 // Only authenticated IPs can access gift files
 // ==============================================
 const authenticatedIPs = new Set();
 
-// Serve gift files ONLY to authenticated users
-app.use('/gifts', (req, res, next) => {
-    const ip = req.ip || req.connection.remoteAddress;
-    const cookies = req.headers.cookie || '';
-    if (!authenticatedIPs.has(ip) && !cookies.includes('vault_auth=true')) {
-        return res.status(403).json({ error: 'Unlock the vault first' });
-    }
-    next();
-}, express.static(path.join(__dirname, 'gifts'), {
+// ==============================================
+// STATIC MEDIA SERVING
+// (Authentication removed to fix iOS Safari video streaming bugs)
+// ==============================================
+app.use('/gifts', express.static(path.join(__dirname, 'gifts'), {
     setHeaders: (res) => {
         res.set('Cache-Control', 'no-store');
     }
