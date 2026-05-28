@@ -321,7 +321,7 @@ app.post('/api/unlock', (req, res) => {
                 type: 'video',
                 title: 'A Beautiful Day - Part 2',
                 message: 'Seeing you so happy makes my world light up.',
-                src: '/gifts/beautiful_day_2.mp4'
+                src: '/gifts/harsha_28_05.mp4'
             },
             {
                 type: 'audio',
