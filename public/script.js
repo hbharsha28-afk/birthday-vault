@@ -346,7 +346,7 @@ function renderGifts() {
                 mediaHTML = `
                     <div class="gift-card-file-preview video-preview">
                         <span class="file-icon">🎬</span>
-                        <span class="file-name">${gift.src.split('/').pop()}</span>
+                        <span class="file-name">${gift.title}</span>
                         <span class="play-badge">▶ Play</span>
                     </div>`;
                 typeLabel = '🎬 VIDEO';
@@ -370,7 +370,7 @@ function renderGifts() {
                 mediaHTML = `
                     <div class="gift-card-file-preview pdf-preview">
                         <span class="file-icon">📄</span>
-                        <span class="file-name">${gift.src.split('/').pop()}</span>
+                        <span class="file-name">${gift.title}</span>
                         <span class="play-badge">📖 Open</span>
                     </div>`;
                 typeLabel = '📄 PDF';
@@ -381,7 +381,7 @@ function renderGifts() {
                 mediaHTML = `
                     <div class="gift-card-file-preview">
                         <span class="file-icon">${icon}</span>
-                        <span class="file-name">${gift.src.split('/').pop()}</span>
+                        <span class="file-name">${gift.title}</span>
                         <span class="play-badge">⬇ Download</span>
                     </div>`;
                 typeLabel = '📎 FILE';
@@ -466,7 +466,7 @@ function openLightbox(gift) {
             contentHTML = `
                 <div style="text-align:center; padding: 3rem;">
                     <p style="font-size: 5rem; margin-bottom: 1rem;">${getFileIcon(gift.src)}</p>
-                    <p style="color: var(--text-secondary); margin-bottom: 1.5rem; font-size: 1.1rem;">${gift.src.split('/').pop()}</p>
+                    <p style="color: var(--text-secondary); margin-bottom: 1.5rem; font-size: 1.1rem;">${gift.title}</p>
                     <a href="${gift.src}" download="${gift.title}.${gift.src.split('.').pop()}" class="generic-download-btn">⬇️ Download File</a>
                 </div>`;
             break;
