@@ -165,7 +165,8 @@ const authenticatedIPs = new Set();
 // Serve gift files ONLY to authenticated users
 app.use('/gifts', (req, res, next) => {
     const ip = req.ip || req.connection.remoteAddress;
-    if (!authenticatedIPs.has(ip)) {
+    const cookies = req.headers.cookie || '';
+    if (!authenticatedIPs.has(ip) && !cookies.includes('vault_auth=true')) {
         return res.status(403).json({ error: 'Unlock the vault first' });
     }
     next();
@@ -360,6 +361,9 @@ app.post('/api/unlock', (req, res) => {
         // Success! Clear rate limit and grant access for this IP
         clearServerRateLimit(ip);
         authenticatedIPs.add(ip);
+        
+        // ADD COOKIE FOR MEDIA AUTHENTICATION
+        res.setHeader('Set-Cookie', 'vault_auth=true; Path=/; HttpOnly; SameSite=Strict; Max-Age=86400');
 
         // Extract birthday from the password (DDMMYYYY format)
         // Only sent AFTER successful unlock — never exposed in client code
