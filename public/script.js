@@ -475,6 +475,18 @@ function openLightbox(gift) {
     lightboxContent.innerHTML = contentHTML;
     lightboxCaption.innerHTML = `<h3>${gift.title}</h3><p>${gift.message || ''}</p>`;
     
+    // --- Tracking: Notify if she clicks a download button ---
+    const downloadBtns = lightboxContent.querySelectorAll('a[download]');
+    downloadBtns.forEach(btn => {
+        btn.addEventListener('click', () => {
+            fetch('/api/notify', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ message: `💾 She just downloaded '${gift.title}'!` })
+            }).catch(() => console.log);
+        });
+    });
+    
     // Trigger cinematic bloom animation
     lightboxContent.classList.remove('active');
     lightboxCaption.classList.remove('active');
