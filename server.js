@@ -315,7 +315,7 @@ app.post('/api/unlock', (req, res) => {
                 type: 'video',
                 title: 'A Beautiful Day - Part 1',
                 message: 'A memory I will cherish forever, just seeing your beautiful smile.',
-                src: '/gifts/beautiful_day_1.mp4'
+                src: '/gifts/VN20260528_115338.mp4'
             },
             {
                 type: 'video',
