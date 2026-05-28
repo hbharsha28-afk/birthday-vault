@@ -348,6 +348,12 @@ app.post('/api/unlock', (req, res) => {
                 title: 'A Message From Me',
                 message: 'Just my voice, telling you exactly how I feel.',
                 src: '/gifts/my_voice_note.mp3'
+            },
+            {
+                type: 'audio',
+                title: 'My New Song For You',
+                message: 'I created this song specially for you. I hope you love it 🎵',
+                src: '/gifts/new_song.mp3'
             }
         ];
 
